@@ -1,9 +1,18 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class NewBehaviourScript : MonoBehaviour
 {
     private Vector2 _direction = Vector2.right;
 
+    private List<Transform> _segments;
+
+    public Transform segmentPrefab;
+    private void Start()
+    {
+        _segments = new List<Transform>();
+        _segments.Add(this.transform);
+    }
     // Snake Movement
     private void Update()
     {

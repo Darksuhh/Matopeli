@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class Snake : MonoBehaviour
 {
+    public DateTime StartGame;
+    public int score = 0;
     public Transform segmentPrefab;
     public Vector2Int direction = Vector2Int.right;
     public float speed = 20f;
@@ -11,12 +14,13 @@ public class Snake : MonoBehaviour
     public int initialSize = 4;
     public bool moveThroughWalls = false;
 
-    private List<Transform> segments = new List<Transform>();
+    public List<Transform> segments = new List<Transform>();
     private Vector2Int input;
     private float nextUpdate;
 
-    private void Start()
+    public void Start()
     {
+        StartGame = DateTime.UtcNow;
         ResetState();
     }
 
@@ -76,6 +80,7 @@ public class Snake : MonoBehaviour
         Transform segment = Instantiate(segmentPrefab);
         segment.position = segments[segments.Count - 1].position;
         segments.Add(segment);
+        score = score + 1;
     }
 
     public void ResetState()

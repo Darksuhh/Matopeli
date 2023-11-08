@@ -1,8 +1,10 @@
 using System.Collections;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Globalization;
+using System.IO;
 
 [System.Serializable]
 public class PlayerScore
@@ -14,7 +16,34 @@ public class PlayerScore
 }
 public class SaveLoadJSON : MonoBehaviour
 {
+    public GameObject Snake;
+
     public List<PlayerScore> players;
+
+    string saveFilePath;
+    // Start is called before the first frame update
+    void Start()
+    {
+        saveFilePath = Application.persistentDataPath + "/PlayerData.json";
+        Debug.Log(saveFilePath);
+    }
+
+    public void LoadScore()
+    {
+        if (File.Exists(saveFilePath))
+        {
+            string json = File.ReadAllText(saveFilePath);
+            // muutetaan json players muuttujiksi
+            players = JsonConvert.DeserializeObject<List<PlayerScore>>(json);
+        }
+    }
+
+    public void SaveScore()
+    {
+        string PlayerJSON = JsonConvert.SerializeObject(players, new Newtonsoft.Json.Converters.StringEnumConverter());
+        // tallenneaan players tiedot
+        File.WriteAllText(saveFilePath, PlayerJSON);
+    }
     public void NewScore(string name, int score, string time, string date)
     {
         PlayerScore p = new PlayerScore();
@@ -26,16 +55,23 @@ public class SaveLoadJSON : MonoBehaviour
         players.Add(p);
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public void AddNewScore(string name)
     {
-        DateTime now = DateTime.UtcNow;
+        int score = Snake.GetComponent<Snake>().score; // haetaan pisteet k‰‰rmeest‰
 
-        //StartGame = now.ToString();
+        DateTime startgame = Snake.GetComponent<Snake>().StartGame; // haetaan aloitusaika k‰‰rmeest‰
 
-        string date = DateTime.Now.ToString("dd.mm.yyyy");
+        DateTime endgame = DateTime.UtcNow; // annetaan t‰m‰nhetkinen lopetusaika
 
-        NewScore("Kimmo", 500, "150", date);
+        string time = (endgame - startgame).TotalSeconds.ToString(); // lasketaan kuinkamonta sekunttia on mennyt aloituksen ja lopetus v‰liss‰
+
+        string date = DateTime.Now.ToString("dd.mm.yyyy");  
+
+        NewScore(name, score, time, date);
+
+        Debug.Log($"Player: {name} Score: {score} Startgame: {startgame} Endgame: {endgame} Time: {time}");
+
+        SaveScore();
     }
 
     // Update is called once per frame

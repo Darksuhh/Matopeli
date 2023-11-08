@@ -7,7 +7,13 @@ public class Snake : MonoBehaviour
 {
     public DateTime StartGame;
     public int score = 0;
+
     public Transform segmentPrefab;
+
+    public GameObject UI;
+
+    bool isDead = false;
+
     public Vector2Int direction = Vector2Int.right;
     public float speed = 20f;
     public float speedMultiplier = 1f;
@@ -21,11 +27,19 @@ public class Snake : MonoBehaviour
     public void Start()
     {
         StartGame = DateTime.UtcNow;
+
         ResetState();
     }
 
-    private void Update()
+    public void GameOver()
     {
+        isDead = true;
+        UI.GetComponent<CanvasManager>().ShowGameOverPanel();
+    }
+
+    public void Update()
+    {
+        if (isDead) return;
         // Only allow turning up or down while moving in the x-axis
         if (direction.x != 0f)
         {
@@ -46,8 +60,9 @@ public class Snake : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    public void FixedUpdate()
     {
+        if (isDead) return;
         // Wait until the next update before proceeding
         if (Time.time < nextUpdate) {
             return;
@@ -85,6 +100,8 @@ public class Snake : MonoBehaviour
 
     public void ResetState()
     {
+        isDead = false;
+        score = 0;
         direction = Vector2Int.right;
         transform.position = Vector3.zero;
 
@@ -116,7 +133,7 @@ public class Snake : MonoBehaviour
         return false;
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    public void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Food"))
         {
@@ -124,19 +141,19 @@ public class Snake : MonoBehaviour
         }
         else if (other.gameObject.CompareTag("Obstacle"))
         {
-            ResetState();
+            GameOver();
         }
         else if (other.gameObject.CompareTag("Wall"))
         {
             if (moveThroughWalls) {
                 Traverse(other.transform);
             } else {
-                ResetState();
+                GameOver();
             }
         }
     }
 
-    private void Traverse(Transform wall)
+    public void Traverse(Transform wall)
     {
         Vector3 position = transform.position;
 

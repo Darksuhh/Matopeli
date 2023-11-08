@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,9 +21,21 @@ public class CanvasManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        GetComponent<SaveLoadJSON>().LoadScore();
         players = GetComponent<SaveLoadJSON>().players;
 
-        for(int i=0; i < players.Count; i++)
+    }
+
+    public void UpdateHighScore()
+    {
+
+        players = GetComponent<SaveLoadJSON>().players;
+
+        foreach (Transform t in PlayerScoreContent.transform)
+            Destroy(t.gameObject);
+
+        for (int i = 0; i < players.Count; i++)
         {
             string playername = players[i].name;
             int score = players[i].score;
@@ -44,21 +57,39 @@ public class CanvasManager : MonoBehaviour
         }
     }
 
+    public void ShowGameOverPanel()
+    {
+
+        GameOverPanel.SetActive(true);
+
+        Text sc = GameOverPanel.transform.Find("ScoreText").GetComponent<Text>();
+        sc.text = score.ToString();
+
+        DateTime startgame = Snake.GetComponent<Snake>().StartGame;
+        DateTime endgame = DateTime.UtcNow;
+
+        string time = (endgame - startgame).TotalSeconds.ToString();
+
+        Text ti = GameOverPanel.transform.Find("TimeText").GetComponent<Text>();
+        ti.text = time;
+    }
+
+    public void RestartButton()
+    {
+        string PlayerName = GameOverPanel.transform.Find("PlayerName").GetComponent<InputField>().text;
+
+        GetComponent<SaveLoadJSON>().AddNewScore(PlayerName);
+
+        GameOverPanel.SetActive(false);
+
+        //Snake.GetComponent<Snake>().StartGame = DateTime.UtcNow;
+        Snake.GetComponent<Snake>().ResetState();
+
+    }
     // Update is called once per frame
     void Update()
     {
-        score = Snake.transform.GetComponent<Snake>().score;
-        ScoreText.text = score.ToString();
-
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            //GameOverPanel.SetActive(True);
-
-            Text sc = GameOverPanel.transform.Find("ScoreText").GetComponent<Text>();
-            //sc.text = score;
-            Text ti = GameOverPanel.transform.Find("TimeText").GetComponent<Text>();
-            //ti.text = time;
-
-        }
+        score = Snake.transform.GetComponent<Snake>().score; // hakee k‰‰rmeest‰ pisteet
+        ScoreText.text = score.ToString(); // annetaan pisteet scoretekstille
     }
 }

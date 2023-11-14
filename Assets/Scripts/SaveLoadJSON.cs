@@ -26,6 +26,7 @@ public class SaveLoadJSON : MonoBehaviour
     {
         saveFilePath = Application.persistentDataPath + "/PlayerData.json";
         Debug.Log(saveFilePath);
+
     }
 
     public void LoadScore()
@@ -65,7 +66,7 @@ public class SaveLoadJSON : MonoBehaviour
 
         string time = (endgame - startgame).TotalSeconds.ToString(); // lasketaan kuinkamonta sekunttia on mennyt aloituksen ja lopetus välissä
 
-        string date = DateTime.Now.ToString("dd.mm.yyyy");  
+        string date = DateTime.Now.ToString("dd.MM.yyyy");  
 
         NewScore(name, score, time, date);
 

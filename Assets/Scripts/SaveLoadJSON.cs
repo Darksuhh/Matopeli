@@ -26,7 +26,7 @@ public class SaveLoadJSON : MonoBehaviour
     {
         saveFilePath = Application.persistentDataPath + "/PlayerData.json";
         Debug.Log(saveFilePath);
-
+        LoadScore();
     }
 
     public void LoadScore()

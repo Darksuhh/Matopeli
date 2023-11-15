@@ -13,6 +13,7 @@ public class Snake : MonoBehaviour
     public GameObject UI;
 
     bool isDead = false;
+    public bool isPause = false;
 
     public Vector2Int direction = Vector2Int.right;
     public float speed = 20f;
@@ -39,7 +40,7 @@ public class Snake : MonoBehaviour
 
     public void Update()
     {
-        if (isDead) return;
+        if (isDead || isPause) return;
         // Only allow turning up or down while moving in the x-axis
         if (direction.x != 0f)
         {
@@ -62,7 +63,7 @@ public class Snake : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (isDead) return;
+        if (isDead || isPause) return;
         // Wait until the next update before proceeding
         if (Time.time < nextUpdate) {
             return;

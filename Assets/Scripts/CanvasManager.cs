@@ -74,6 +74,19 @@ public class CanvasManager : MonoBehaviour
         ti.text = time;
     }
 
+    public void ShowHighScorePanel()
+    {
+        ScorePanel.SetActive(true);
+        UpdateHighScore();
+
+        Snake.GetComponent<Snake>().isPause = true;
+    }
+    public void CloseHighScorePanel()
+    {
+        ScorePanel.SetActive(false);
+        Snake.GetComponent<Snake>().isPause = false;
+    }
+
     public void RestartButton()
     {
         string PlayerName = GameOverPanel.transform.Find("PlayerName").GetComponent<InputField>().text;

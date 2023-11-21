@@ -104,5 +104,10 @@ public class CanvasManager : MonoBehaviour
     {
         score = Snake.transform.GetComponent<Snake>().score; // hakee k‰‰rmeest‰ pisteet
         ScoreText.text = score.ToString(); // annetaan pisteet scoretekstille
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
 }

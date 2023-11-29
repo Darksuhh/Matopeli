@@ -1,0 +1,6 @@
+controllit:
+ylos: w tai ylänuoli näppäin
+alas: s tai alanuoli näppäin
+oikealle: d tai oikea nuolinäppäin
+vasen: a tai vasen nuolinäppäin
+esc: quit

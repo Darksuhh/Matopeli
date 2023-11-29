@@ -7,6 +7,8 @@ public class Snake : MonoBehaviour
 {
     public DateTime StartGame;
     public int score = 0;
+    public AudioClip eatSound;
+    public AudioClip gameover;
 
     public Transform segmentPrefab;
 
@@ -97,6 +99,7 @@ public class Snake : MonoBehaviour
         segment.position = segments[segments.Count - 1].position;
         segments.Add(segment);
         score = score + 1;
+        GetComponent<AudioSource>().PlayOneShot(eatSound);
     }
 
     public void ResetState()
@@ -105,6 +108,7 @@ public class Snake : MonoBehaviour
         score = 0;
         direction = Vector2Int.right;
         transform.position = Vector3.zero;
+        GetComponent<AudioSource>().Play();
 
         // Start at 1 to skip destroying the head
         for (int i = 1; i < segments.Count; i++) {
@@ -143,6 +147,8 @@ public class Snake : MonoBehaviour
         else if (other.gameObject.CompareTag("Obstacle"))
         {
             GameOver();
+            GetComponent<AudioSource>().Stop();
+            GetComponent<AudioSource>().PlayOneShot(gameover);
         }
         else if (other.gameObject.CompareTag("Wall"))
         {
@@ -150,6 +156,8 @@ public class Snake : MonoBehaviour
                 Traverse(other.transform);
             } else {
                 GameOver();
+                GetComponent<AudioSource>().Stop();
+                GetComponent<AudioSource>().PlayOneShot(gameover);
             }
         }
     }

@@ -18,6 +18,7 @@ public class CanvasManager : MonoBehaviour
 
     public GameObject ScorePanel;
     public GameObject GameOverPanel;
+    public AudioClip gameover;
     // Start is called before the first frame update
     void Start()
     {
@@ -59,9 +60,7 @@ public class CanvasManager : MonoBehaviour
 
     public void ShowGameOverPanel()
     {
-
         GameOverPanel.SetActive(true);
-
         Text sc = GameOverPanel.transform.Find("ScoreText").GetComponent<Text>();
         sc.text = score.ToString();
 
@@ -78,13 +77,14 @@ public class CanvasManager : MonoBehaviour
     {
         ScorePanel.SetActive(true);
         UpdateHighScore();
-
         Snake.GetComponent<Snake>().isPause = true;
+        Snake.GetComponent<AudioSource>().Stop();
     }
     public void CloseHighScorePanel()
     {
         ScorePanel.SetActive(false);
         Snake.GetComponent<Snake>().isPause = false;
+        Snake.GetComponent<AudioSource>().Play();
     }
 
     public void RestartButton()
@@ -98,6 +98,10 @@ public class CanvasManager : MonoBehaviour
         //Snake.GetComponent<Snake>().StartGame = DateTime.UtcNow;
         Snake.GetComponent<Snake>().ResetState();
 
+    }
+    public void Quit()
+    {
+        Application.Quit();
     }
     // Update is called once per frame
     void Update()
